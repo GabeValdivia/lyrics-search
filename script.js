@@ -37,13 +37,20 @@ function showData(data) {
 	}
 }
 
-// Get prev and next results
+// Get prev and next songs
 async function getMoreSongs(url) {
-	// const res = await fetch(`https://cors-anywhere.herokuapp.com/${url}`);
-	const res = await fetch(`https://cors-anywhere.herokuapp.com/${url}`);
+  const res = await fetch(`https://cors-anywhere.herokuapp.com/${url}`);
+  const data = await res.json();
+
+  showData(data);
+}
+
+// Get lyrics for song
+async function getLyrics(artist, songTitle) {
+	const res = await fetch(`${apiURL}/v1/${artist}/${songTitle}`);
 	const data = await res.json();
 
-	showData(data);
+	console.log(data);
 }
 
 // Event listeners
@@ -59,4 +66,16 @@ form.addEventListener('submit', e => {
 	}
 
 	searchSongs(searchTerm);
+});
+
+// Get lyrics button click
+result.addEventListener('click', e => {
+	const clickedEl = e.target;
+
+	if(clickedEl.tagName === 'BUTTON'){
+		const artist = clickedEl.getAttribute('data-artist');
+		const songTitle = clickedEl.getAttribute('data-songtitle');
+
+		getLyrics(artist, songTitle);
+	}
 });
